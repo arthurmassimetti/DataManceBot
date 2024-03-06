@@ -6,15 +6,49 @@ from undetected_chromedriver import *
 from selenium.webdriver.support.ui import WebDriverWait
 import time
 import pyautogui
+from openpyxl import load_workbook
+
+from openpyxl import load_workbook
+import pyautogui
+import time
+
+
+def buscaExcel():
+    workbook = load_workbook(r'C:\Users\ADMINISTRATOR\Desktop\excelRobo\robo.xlsx')
+
+    worksheet = workbook.active
+
+    # Inicializar listas para armazenar os dados extraídos
+    cpf_list = []
+    nome_list = []
+    tipo_exame_list = []
+    data_exame_list = []
+
+    # Iterar sobre as linhas e extrair os dados
+    for row in worksheet.iter_rows(min_row=1, max_row=1, values_only=True):  # Comece da segunda linha, assumindo que a primeira linha são cabeçalhos
+        cpf_list.append(row[0])
+        nome_list.append(row[1])
+        tipo_exame_list.append(row[2])
+        data_exame_list.append(row[3])
+
+    # Imprimir e pausar após cada linha
+    for i in range(len(cpf_list)):
+        print("\n" * 2)
+        print("CPF:", cpf_list[i])
+        print("Nome:", nome_list[i])
+        print("Tipo de Exame:", tipo_exame_list[i])
+        print("Data do Exame:", data_exame_list[i])
+        print("\n" * 2)
+
+        # Aguarde 5 segundos antes de imprimir a próxima linha
+        time.sleep(0.3)
 
 driver = uc.Chrome() #define o navegador (undetected chrome)
-
 
 def fazer_login_um():
 
     print('iniciando automação!')
     driver.get("https://rh.dtm.com.br/")  # define o url para pesquisa
-
     driver.maximize_window()  # maximiza a tela
 
     usuario = 'FORT-46'  # acesso de usuario
@@ -39,6 +73,7 @@ def fazer_login_um():
     time.sleep(15)
 
 def fazer_login_um_sem_page():
+
     usuario = 'FORT-46'  # acesso de usuario
 
     login = driver.find_element('xpath', '//*[@id="Editbox1"]')
@@ -85,8 +120,9 @@ def fazer_login_dois():
 def exames_medicos():
 
     print('fechando anuncios')
-    pyautogui.typewrite(['enter'] * 2)
     time.sleep(4)
+    pyautogui.typewrite(['enter'] * 6)
+    time.sleep(1)
 
     print('indo até MO')
     pyautogui.moveTo(222, 150, duration=2)
@@ -108,9 +144,10 @@ def exames_medicos():
     pyautogui.click()
     time.sleep(0.3)
 
-def pesquisa_nome():
+def pesquisa_nome(nome_list, i):
 
-    print('indo até aba para nome')
+    nome_list= []
+
     pyautogui.moveTo(339, 238, duration=2)
     pyautogui.click()
     time.sleep(0.3)
@@ -121,23 +158,21 @@ def pesquisa_nome():
     print('deixando vazio o espaço para inserção de nome')
     pyautogui.typewrite(['backspace'] * 8)
     time.sleep(0.3)
-    print('inserindo nome de funcionario da procedure')
-    pyautogui.typewrite("Katia Barbosa de Oliveira", interval=0.5)  # aqui vai a procedure de nome
+
+    pyautogui.typewrite(nome_list[i], interval=0.5)  # Aqui vai a procedure de nome
     pyautogui.typewrite(['enter'] * 2)
     time.sleep(0.3)
 
-def pesquisa_matricula():
+def pesquisa_cpf():
 
-    pyautogui.moveTo(396, 239, duration=2)
+    cpf = cpf_list
+    pyautogui.moveTo(639,240, duration=2)
     pyautogui.click()
-
-    print('inserindo matricula de funcionario')
-    pyautogui.typewrite("1802")
+    pyautogui.click()
+    print('inserindo CPF de funcionario')
+    pyautogui.typewrite("38426423850",  interval=0.2)
     pyautogui.typewrite(['enter'] * 1)
     time.sleep(0.3)
-
-    pyautogui.moveTo(302, 712, duration=2)
-    pyautogui.click()
 
 def sair():
 
@@ -240,7 +275,8 @@ def dataExameigual():
     time.sleep(0.3)
 
     print('copiando data')
-    pyautogui.hotkey('ctrl', 'c')
+    pyautogui.typewrite(str(data_exame_list[i]), interval=0.5)
+
     time.sleep(0.3)
 
     pyautogui.moveTo(658, 217, duration=2)
@@ -249,7 +285,8 @@ def dataExameigual():
     time.sleep(0.3)
 
     print("colando data")
-    pyautogui.hotkey('ctrl', 'v')
+    pyautogui.typewrite(str(data_exame_list[i]), interval=0.5)
+
     time.sleep(0.3)
 
     pyautogui.moveTo(1059, 396, duration=2)
@@ -257,8 +294,15 @@ def dataExameigual():
     pyautogui.click()
     time.sleep(0.3)
 
-    print("colando data")
-    pyautogui.hotkey('ctrl', 'v')
+    data = str(data_exame_list[i])  # Converta a data para string
+    ultimo_digito = int(data[-1])  # Obtenha o último dígito e converta para inteiro
+    novo_ultimo_digito = ultimo_digito + 1  # Adicione 1 ao último dígito
+    nova_data = data[:-1] + str(
+    novo_ultimo_digito)  # Concatene a parte da data sem o último dígito com o novo último dígito
+    print("Nova Data do Exame:", nova_data)
+
+    pyautogui.typewrite(nova_data, interval=0.5)
+
     time.sleep(0.3)
 
 def ordemExame():
@@ -285,7 +329,6 @@ def statusExame():
     pyautogui.click()
     time.sleep(0.3)
 
-
 def medicoExame():
 
     print('indo até medico ')
@@ -298,53 +341,66 @@ def medicoExame():
     pyautogui.click()
     time.sleep(0.3)
 
-    #inserir nome
-    #selecionar nome
-    #e fechar
+    print('inserindo nome do medico responsavel (FRANCISCO CANHETTI')
+    pyautogui.typewrite("FRANCISCO CANHETTI")
+    pyautogui.moveTo(511, 564, duration=2)
+    pyautogui.click()
+    time.sleep(1)
+
+    print('confirmando e fechando')
+    pyautogui.moveTo(716, 337, duration=2)
+    pyautogui.click()
+    pyautogui.click()
+    time.sleep(2)
 
 
-# Funções relacionadas ao login e verificação de cores
+buscaExcel()
+time.sleep(1)
+
 fazer_login_um()
 time.sleep(1)
 
 verificarCorSecundaria()
 time.sleep(1)
 
-# Função para verificar a cor
 verificar_cor(x, y)
 time.sleep(1)
 
 verificarCorSecundaria()
 time.sleep(1)
 
-# Funções relacionadas a exames médicos
 exames_medicos()
 time.sleep(1)
 
-# Funções relacionadas à pesquisa e inclusão
-pesquisa_nome()
+pesquisa_nome(nome_list, i)
 time.sleep(1)
 
 incluir()
 time.sleep(1)
 
-# Funções relacionadas à data e ordem dos exames
 dataExameigual()
 time.sleep(1)
 
 ordemExame()
 time.sleep(1)
 
-# Funções relacionadas ao status do exame
 statusExame()
 time.sleep(1)
 
-# Funções relacionadas ao nome do médico
 nomeMedico()
 time.sleep(0.5)
 
-# Funções relacionadas à pesquisa de laboratório
+medicoExame()
+time.sleep(0.5)
+
 pesquisaLaboratorio()
 time.sleep(999999)
 
 
+
+
+
+
+
+
+#369,796 gravar
