@@ -47,11 +47,3 @@ Para instalar e utilizar este sistema, siga as instruções abaixo:
 5. **Executando o Programa**:
 
     Após as etapas acima serem concluídas com sucesso, você pode executar o programa conforme descrito na seção anterior.
-
-## Contribuições
-
-Se encontrar algum problema ou tiver sugestões de melhoria, sinta-se à vontade para abrir uma issue ou enviar um pull request.
-
-## Licença
-
-Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE.md](LICENSE.md) para mais detalhes.
