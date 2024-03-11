@@ -16,22 +16,42 @@ Este projeto visa desenvolver um sistema de automação para o departamento de R
 
 O departamento de Recursos Humanos desempenha um papel crucial na gestão de pessoas dentro de uma organização. No entanto, o processo manual de cadastro de funcionários pode ser moroso e propenso a erros, resultando em desperdício de tempo e recursos. Automatizar esse processo é fundamental para melhorar a eficiência operacional do departamento de RH, permitindo que os profissionais foquem em atividades mais estratégicas. Além disso, a integração com a base de dados existente ajuda a garantir a consistência das informações e a facilitar a tomada de decisões baseadas em dados. Portanto, o desenvolvimento deste sistema de automação para cadastro de funcionários é essencial para otimizar os processos internos da empresa e promover uma gestão de recursos humanos mais eficaz.
 
-## Equipe
+## Instruções de Instalação e Utilização
 
-- **Arthur Massimetti Sartori**
-  - Gestor de Projetos/Desenvolvedor
-  - Email: arthursartori27@gmail.com
+Para instalar e utilizar este sistema, siga as instruções abaixo:
 
-- **Richard Borges Do Amaral**
-  - Desenvolvedor
-  - Email: rickcreator155@gmail.com
+1. **Python**: Verifique se você possui o Python instalado em sua máquina. Você pode baixá-lo em [python.org](https://www.python.org/downloads/).
 
-- **Rodrigo Ferreira**
-  - Líder de Projeto
-  - Email: rdogfh@gmail.com
+2. **Bibliotecas**: Instale as bibliotecas necessárias para o programa. Utilize o comando abaixo para instalar as dependências via pip:
 
-- **Edson Benjamin**
-  - Desenvolvedor
-  - Email: edson.bsilva@hotmail.com
+    ```
+    pip install pyautogui 
+    pip install pandas
+    pip install selenium
+    ```
 
-Este é um resumo do projeto de automação de cadastro de funcionários. Qualquer dúvida ou sugestão, sinta-se à vontade para entrar em contato com algum membro da equipe.
+3. **Formato da Planilha Excel**:
+
+    Certifique-se de que a planilha Excel esteja formatada corretamente. Siga as instruções abaixo:
+
+    - A primeira linha deve conter o cabeçalho com os nomes das colunas, na seguinte ordem:
+        - CPF dos funcionários
+        - Nome do funcionário por extenso
+        - Tipo de exame
+        - Data do exame
+
+4. **Resolução do Monitor**:
+
+    Certifique-se de que seu monitor está configurado para uma resolução de 1440x990 pixels, pois o programa utiliza a biblioteca PyAutoGUI, que depende das coordenadas do monitor.
+
+5. **Executando o Programa**:
+
+    Após as etapas acima serem concluídas com sucesso, você pode executar o programa conforme descrito na seção anterior.
+
+## Contribuições
+
+Se encontrar algum problema ou tiver sugestões de melhoria, sinta-se à vontade para abrir uma issue ou enviar um pull request.
+
+## Licença
+
+Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE.md](LICENSE.md) para mais detalhes.
