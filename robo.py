@@ -7,45 +7,31 @@ from selenium.webdriver.support.ui import WebDriverWait
 import time
 import pyautogui
 from openpyxl import load_workbook
+import pandas as pd
 
-from openpyxl import load_workbook
-import pyautogui
-import time
-
-
-def buscaExcel():
-    workbook = load_workbook(r'C:\Users\ADMINISTRATOR\Desktop\excelRobo\robo.xlsx')
-
-    worksheet = workbook.active
-
-    # Inicializar listas para armazenar os dados extraídos
-    cpf_list = []
-    nome_list = []
-    tipo_exame_list = []
-    data_exame_list = []
-
-    # Iterar sobre as linhas e extrair os dados
-    for row in worksheet.iter_rows(min_row=1, max_row=1, values_only=True):  # Comece da segunda linha, assumindo que a primeira linha são cabeçalhos
-        cpf_list.append(row[0])
-        nome_list.append(row[1])
-        tipo_exame_list.append(row[2])
-        data_exame_list.append(row[3])
-
-    # Imprimir e pausar após cada linha
-    for i in range(len(cpf_list)):
-        print("\n" * 2)
-        print("CPF:", cpf_list[i])
-        print("Nome:", nome_list[i])
-        print("Tipo de Exame:", tipo_exame_list[i])
-        print("Data do Exame:", data_exame_list[i])
-        print("\n" * 2)
-
-        # Aguarde 5 segundos antes de imprimir a próxima linha
-        time.sleep(0.3)
+i = 0
 
 driver = uc.Chrome() #define o navegador (undetected chrome)
 
+cpf_list = []
+nome_list = []
+tipo_exame_list = []
+data_exame_list = []
+tipo_exame_list_string = ""
+
+values_only = True
+
+
+#workbook = load_workbook(r'C:\Users\ADMINISTRATOR\Desktop\excelRobo\robo.xlsx')
+#worksheet = workbook.active
+#rows = worksheet.iter_rows(min_row=1, values_only=True)
+
+worksheet = pd.read_excel(r'C:\Users\ADMINISTRATOR\Desktop\excelRobo\robo.xlsx').to_dict(orient='records')
+
+
+
 def fazer_login_um():
+
 
     print('iniciando automação!')
     driver.get("https://rh.dtm.com.br/")  # define o url para pesquisa
@@ -144,9 +130,7 @@ def exames_medicos():
     pyautogui.click()
     time.sleep(0.3)
 
-def pesquisa_nome(nome_list, i):
-
-    nome_list= []
+def pesquisa_nome(nome_list):
 
     pyautogui.moveTo(339, 238, duration=2)
     pyautogui.click()
@@ -159,7 +143,7 @@ def pesquisa_nome(nome_list, i):
     pyautogui.typewrite(['backspace'] * 8)
     time.sleep(0.3)
 
-    pyautogui.typewrite(nome_list[i], interval=0.5)  # Aqui vai a procedure de nome
+    pyautogui.typewrite(nome_list, interval=0.7)  # Aqui vai a procedure de nome
     pyautogui.typewrite(['enter'] * 2)
     time.sleep(0.3)
 
@@ -219,7 +203,8 @@ def incluir():
 
 def nomeMedico():
 
-    print('indo até nome do medico')
+
+    print('indo até nome do medico responsavel')
     pyautogui.moveTo(685, 347, duration=2)
     pyautogui.click()
     time.sleep(1)
@@ -266,7 +251,7 @@ def pesquisaLaboratorio():
     pyautogui.click()
     time.sleep(2)
 
-def dataExameigual():
+def dataExameigual(data_exame):
 
     print("indo para data")
     pyautogui.moveTo(453, 217, duration=2)
@@ -275,7 +260,7 @@ def dataExameigual():
     time.sleep(0.3)
 
     print('copiando data')
-    pyautogui.typewrite(str(data_exame_list[i]), interval=0.5)
+    pyautogui.typewrite(str(data_exame), interval=0.5)
 
     time.sleep(0.3)
 
@@ -285,7 +270,7 @@ def dataExameigual():
     time.sleep(0.3)
 
     print("colando data")
-    pyautogui.typewrite(str(data_exame_list[i]), interval=0.5)
+    pyautogui.typewrite(str(data_exame), interval=0.5)
 
     time.sleep(0.3)
 
@@ -294,13 +279,13 @@ def dataExameigual():
     pyautogui.click()
     time.sleep(0.3)
 
-    data = str(data_exame_list[i])  # Converta a data para string
+    data = str(data_exame)  # Converta a data para string
     ultimo_digito = int(data[-1])  # Obtenha o último dígito e converta para inteiro
     novo_ultimo_digito = ultimo_digito + 1  # Adicione 1 ao último dígito
     nova_data = data[:-1] + str(
     novo_ultimo_digito)  # Concatene a parte da data sem o último dígito com o novo último dígito
     print("Nova Data do Exame:", nova_data)
-
+#
     pyautogui.typewrite(nova_data, interval=0.5)
 
     time.sleep(0.3)
@@ -337,13 +322,13 @@ def medicoExame():
     time.sleep(0.3)
 
     print('campo de pesquisa')
-    pyautogui.moveTo(415,444, duration=2)
+    pyautogui.moveTo(404,442, duration=2)
     pyautogui.click()
     time.sleep(0.3)
 
     print('inserindo nome do medico responsavel (FRANCISCO CANHETTI')
     pyautogui.typewrite("FRANCISCO CANHETTI")
-    pyautogui.moveTo(511, 564, duration=2)
+    pyautogui.moveTo(389,567, duration=2)
     pyautogui.click()
     time.sleep(1)
 
@@ -353,48 +338,148 @@ def medicoExame():
     pyautogui.click()
     time.sleep(2)
 
+def verificaSeTelaAparece():
+    x, y =596, 242
 
-buscaExcel()
-time.sleep(1)
+    print('verificando cor de fundo')
+    for i in range(50):
+        lugardacor = pyautogui.pixel(x, y)
+        if lugardacor == (0, 121, 214):
+            pyautogui.moveTo(1096,112, duration=2)
+            pyautogui.click()
+            pyautogui.moveTo(693,544, duration=2)
+            pyautogui.click()
+            pyautogui.typewrite(['esc'] * 4)
+            break
+        else:
+            continue
+
+def fecharPrograma():
+    print('fechando programa')
+    pyautogui.moveTo(369, 796, duration=2)
+    pyautogui.click()
+    time.sleep(0.4)
+    pyautogui.moveTo(909, 428, duration=2)
+    pyautogui.click()
+    time.sleep(0.4)
+    pyautogui.moveTo(851, 550, duration=2)
+    pyautogui.click()
+    time.sleep(0.4)
+    pyautogui.press(['esc'] * 3)
+    time.sleep(1)
+
+
+def tipoExame(tipo_exame):
+
+    pyautogui.moveTo(718,182, duration=2)
+    pyautogui.click()
+    time.sleep(1)
+
+    if tipo_exame == "Admissional":
+        print("exame admissional realizando o cadastro")
+        pyautogui.moveTo(648,201, duration=2)
+        pyautogui.click()
+        time.sleep(0.3)
+    elif tipo_exame == "Demissional":
+        print('exame demissional, realizando cadastro')
+        pyautogui.moveTo(649,214, duration=2)
+        pyautogui.click()
+        time.sleep(0.3)
+    elif tipo_exame == "Periódico":
+        print('exame periodico, realizando cadastro')
+        pyautogui.moveTo(642,227, duration=2)
+        pyautogui.click()
+        time.sleep(0.3)
+    else:
+        print('nada encontrado')
+
+def processarDados(nome:str, tipo_exame:str, data_exame:str):
+
+    pesquisa_nome(nome)
+    time.sleep(1)
+    incluir()
+    time.sleep(1)
+    tipoExame(tipo_exame)
+    time.sleep(1)
+    dataExameigual(data_exame)
+    time.sleep(1)
+    ordemExame()
+    time.sleep(1)
+    statusExame()
+    time.sleep(1)
+    nomeMedico()
+    time.sleep(0.5)
+    medicoExame()
+    time.sleep(0.5)
+    pesquisaLaboratorio()
+    time.sleep(1)
+    fecharPrograma()
+    time.sleep(1)
+
+def buscaExcel():
+
+    next_index = 0
+    def formatarData(value):
+        return value if len(value) == 8 else '0' + str(value)
+
+
+    for row in worksheet:
+        if next_index == 0:
+            row2 = list(row.keys())
+            cpf = row2[0]
+            nome = row2[1]
+            tipo_exame = row2[2]
+            data_exame = formatarData(str(row2[3]))
+            processarDados(nome, tipo_exame, data_exame)
+            next_index += 1
+            print("\n" * 1)
+            print('*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*')
+            print("CPF1:", cpf)
+            print("Nome1:", nome)
+            print("Tipo de Exame1:", tipo_exame)
+            print("Data do Exame1:", data_exame)
+            print('*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*')
+            print("\n" * 1)
+
+
+        row = list(row.items())
+        cpf = row[0][-1]
+        nome = row[1][-1]
+        tipo_exame = row[2][-1]
+        data_exame = row[3][-1]
+        processarDados(nome, tipo_exame, data_exame)
+        print("\n" * 1)
+        print("CPF:", cpf)
+        print("Nome:", nome)
+        print("Tipo de Exame:", tipo_exame)
+        print("Data do Exame:", data_exame)
+        print("\n" * 1)
+
+
+    #$for index, row in enumerate(worksheet.iter_rows(min_row=1, values_only=True), start=1):
+    #$    cpf = row[0]
+    #$    nome = row[1]
+    #$    tipo_exame = row[2]
+    #$    data_exame = row[3]
+
+
+
+
+
 
 fazer_login_um()
 time.sleep(1)
-
 verificarCorSecundaria()
 time.sleep(1)
-
 verificar_cor(x, y)
 time.sleep(1)
-
 verificarCorSecundaria()
 time.sleep(1)
-
+verificaSeTelaAparece()
+time.sleep(1)
 exames_medicos()
 time.sleep(1)
-
-pesquisa_nome(nome_list, i)
-time.sleep(1)
-
-incluir()
-time.sleep(1)
-
-dataExameigual()
-time.sleep(1)
-
-ordemExame()
-time.sleep(1)
-
-statusExame()
-time.sleep(1)
-
-nomeMedico()
-time.sleep(0.5)
-
-medicoExame()
-time.sleep(0.5)
-
-pesquisaLaboratorio()
-time.sleep(999999)
+buscaExcel()
 
 
 
@@ -403,4 +488,5 @@ time.sleep(999999)
 
 
 
-#369,796 gravar
+
+
