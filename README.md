@@ -42,7 +42,7 @@ Para instalar e utilizar este sistema, siga as instruções abaixo:
 
 4. **Resolução do Monitor**:
 
-    Certifique-se de que seu monitor está configurado para uma resolução de 1440x990 pixels, pois o programa utiliza a biblioteca PyAutoGUI, que depende das coordenadas do monitor.
+    Certifique-se de que seu monitor está configurado para uma resolução de 1440x900 pixels, pois o programa utiliza a biblioteca PyAutoGUI, que depende das coordenadas do monitor.
 
 5. **Executando o Programa**:
 
