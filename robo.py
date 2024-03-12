@@ -21,14 +21,11 @@ tipo_exame_list_string = ""
 
 values_only = True
 
-
 #workbook = load_workbook(r'C:\Users\ADMINISTRATOR\Desktop\excelRobo\robo.xlsx')
 #worksheet = workbook.active
 #rows = worksheet.iter_rows(min_row=1, values_only=True)
 
-worksheet = pd.read_excel(r'C:\Users\ADMINISTRATOR\Desktop\excelRobo\robo.xlsx').to_dict(orient='records')
-
-
+worksheet = pd.read_excel(r'C:\Users\ADMINISTRATOR\Desktop\excelRobo\robo.xlsx').to_dict(orient='records') #AQUI VOCÊ COLOCA
 
 def fazer_login_um():
 
@@ -174,21 +171,29 @@ x, y = 719, 349
 def verificar_cor(x, y):
 
     cor = pyautogui.pixel(x, y)
+
     if cor == (132, 130, 255):
+        time.sleep(1)
         print("login não realizado, realizando login para concluir procedimentos")
         fazer_login_dois()
 
     else:
         print("Login já realizado, prosseguindo com os procedimentos")
+        time.sleep(1)
         pyautogui.typewrite(['esc'] * 3)
 
 def verificarCorSecundaria():
+
     x, y = 133, 600
 
     print('verificando cor de fundo')
-    for i in range(50):
+    for i in range(100):
         lugardacor = pyautogui.pixel(x, y)
         if lugardacor == (231,239,247):
+            time.sleep(1.5)
+            break
+
+        elif lugardacor == (0,0,0):
             time.sleep(1.5)
             break
         else:
@@ -368,7 +373,6 @@ def fecharPrograma():
     pyautogui.press(['esc'] * 3)
     time.sleep(1)
 
-
 def tipoExame(tipo_exame):
 
     pyautogui.moveTo(718,182, duration=2)
@@ -461,11 +465,6 @@ def buscaExcel():
     #$    nome = row[1]
     #$    tipo_exame = row[2]
     #$    data_exame = row[3]
-
-
-
-
-
 
 fazer_login_um()
 time.sleep(1)
