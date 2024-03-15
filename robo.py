@@ -13,7 +13,7 @@ i = 0
 
 driver = uc.Chrome() #define o navegador (undetected chrome)
 
-cpf_list = []
+cpf_list = []    
 nome_list = []
 tipo_exame_list = []
 data_exame_list = []
@@ -21,14 +21,11 @@ tipo_exame_list_string = ""
 
 values_only = True
 
-#workbook = load_workbook(r'C:\Users\ADMINISTRATOR\Desktop\excelRobo\robo.xlsx')
-#worksheet = workbook.active
-#rows = worksheet.iter_rows(min_row=1, values_only=True)
+worksheet = pd.read_excel(r'C:\Users\ADMINISTRATOR\Desktop\excelRobo\robo.xlsx').to_dict(orient='records') #AQUI VOCÊ COLOCA O SEU CAMINHO PARA A PASTA DO EXCEL
 
-worksheet = pd.read_excel(r'C:\Users\ADMINISTRATOR\Desktop\excelRobo\robo.xlsx').to_dict(orient='records') #AQUI VOCÊ COLOCA
+NumeroUnidade = input('Digite qual unidade você quer manusear: \n 1 - 005 \n 2 - 003 \n 3 - 001 \n')
 
 def fazer_login_um():
-
 
     print('iniciando automação!')
     driver.get("https://rh.dtm.com.br/")  # define o url para pesquisa
@@ -76,6 +73,8 @@ def fazer_login_um_sem_page():
     time.sleep(15)
 
 def fazer_login_dois():
+
+
     pyautogui.moveTo(734, 419, duration=2)
     pyautogui.click()
     time.sleep(0.3)
@@ -98,9 +97,9 @@ def fazer_login_dois():
     pyautogui.moveTo(779, 531, duration=2)
 
     pyautogui.click()
-    time.sleep(1)
+    time.sleep(7)
 
-def exames_medicos():
+def exames_medicos(NumeroUnidade):
 
     print('fechando anuncios')
     time.sleep(4)
@@ -117,6 +116,27 @@ def exames_medicos():
     pyautogui.click()
     time.sleep(0.3)
 
+    pyautogui.moveTo(95,262, duration=2)
+    pyautogui.click()
+    pyautogui.typewrite(['backspace'] * 4)
+
+    print('inserindo codigo de unidade desejada')
+    if NumeroUnidade == 1:
+        pyautogui.typewrite('005')
+        time.sleep(0.3)
+    elif NumeroUnidade == 2:
+        pyautogui.typewrite('003')
+        time.sleep(0.3)
+    elif NumeroUnidade == 3:
+        pyautogui.typewrite('001')
+        time.sleep(0.3)
+    else:
+        print('não possui nenhum codigo desejado')
+
+    time.sleep(111111)
+    pyautogui.typewrite('enter')
+
+
     print('especifica exames medicos')
     pyautogui.moveTo(311, 239, duration=2)
     pyautogui.click()
@@ -129,13 +149,20 @@ def exames_medicos():
 
 def pesquisa_nome(nome_list):
 
+
     pyautogui.moveTo(339, 238, duration=2)
     pyautogui.click()
     time.sleep(0.3)
 
+    pyautogui.moveTo(482,390, duration=2)
+    pyautogui.click()
+    time.sleep(0.2)
+
     print('abrindo aba para nome')
     pyautogui.moveTo(805, 363, duration=2)
     pyautogui.click()
+    time.sleep(0.2)
+
     print('deixando vazio o espaço para inserção de nome')
     pyautogui.typewrite(['backspace'] * 8)
     time.sleep(0.3)
@@ -256,7 +283,7 @@ def pesquisaLaboratorio():
     pyautogui.click()
     time.sleep(2)
 
-def dataExameigual(data_exame):
+def dataExameigual(data_exame, tipo_exame):
 
     print("indo para data")
     pyautogui.moveTo(453, 217, duration=2)
@@ -264,7 +291,7 @@ def dataExameigual(data_exame):
     pyautogui.click()
     time.sleep(0.3)
 
-    print('copiando data')
+    print('inserindo data', data_exame)
     pyautogui.typewrite(str(data_exame), interval=0.5)
 
     time.sleep(0.3)
@@ -274,26 +301,40 @@ def dataExameigual(data_exame):
     pyautogui.click()
     time.sleep(0.3)
 
-    print("colando data")
+    print('inserindo data', data_exame)
     pyautogui.typewrite(str(data_exame), interval=0.5)
 
     time.sleep(0.3)
 
     pyautogui.moveTo(1059, 396, duration=2)
     pyautogui.click()
+
     pyautogui.click()
     time.sleep(0.3)
 
     data = str(data_exame)  # Converta a data para string
     ultimo_digito = int(data[-1])  # Obtenha o último dígito e converta para inteiro
-    novo_ultimo_digito = ultimo_digito + 1  # Adicione 1 ao último dígito
+    novo_ultimo_digito = ultimo_digito + 2  # Adicione 1 ao último dígito
     nova_data = data[:-1] + str(
     novo_ultimo_digito)  # Concatene a parte da data sem o último dígito com o novo último dígito
     print("Nova Data do Exame:", nova_data)
-#
-    pyautogui.typewrite(nova_data, interval=0.5)
 
-    time.sleep(0.3)
+    if tipo_exame == "Admissional":
+
+        print("Exame Admissional")
+        pyautogui.typewrite(nova_data, interval=0.5)
+        time.sleep(0.3)
+
+    elif tipo_exame == "Periodico":
+        pyautogui.typewrite(nova_data, interval=0.5)
+        time.sleep(0.3)
+
+    elif tipo_exame == "Demissional":
+        print('Exame Demissional, não necessita de data para proximo,\n Prosseguindo os processos.')
+
+    else:
+        print('nada encontrado')
+
 
 def ordemExame():
 
@@ -344,10 +385,11 @@ def medicoExame():
     time.sleep(2)
 
 def verificaSeTelaAparece():
+
     x, y =596, 242
 
     print('verificando cor de fundo')
-    for i in range(50):
+    for i in range(100):
         lugardacor = pyautogui.pixel(x, y)
         if lugardacor == (0, 121, 214):
             pyautogui.moveTo(1096,112, duration=2)
@@ -364,12 +406,15 @@ def fecharPrograma():
     pyautogui.moveTo(369, 796, duration=2)
     pyautogui.click()
     time.sleep(0.4)
+
     pyautogui.moveTo(909, 428, duration=2)
     pyautogui.click()
     time.sleep(0.4)
+
     pyautogui.moveTo(851, 550, duration=2)
     pyautogui.click()
     time.sleep(0.4)
+
     pyautogui.press(['esc'] * 3)
     time.sleep(1)
 
@@ -405,7 +450,7 @@ def processarDados(nome:str, tipo_exame:str, data_exame:str):
     time.sleep(1)
     tipoExame(tipo_exame)
     time.sleep(1)
-    dataExameigual(data_exame)
+    dataExameigual(data_exame, tipo_exame)
     time.sleep(1)
     ordemExame()
     time.sleep(1)
@@ -476,10 +521,9 @@ verificarCorSecundaria()
 time.sleep(1)
 verificaSeTelaAparece()
 time.sleep(1)
-exames_medicos()
+exames_medicos(NumeroUnidade)
 time.sleep(1)
 buscaExcel()
-
 
 
 
