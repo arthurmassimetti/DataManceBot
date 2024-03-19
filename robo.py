@@ -39,7 +39,7 @@ def fazer_login_um():
     login.send_keys(usuario)
     time.sleep(0.3)
 
-    senha = '3Q7kViZyqt'  # senha de usuario
+    senha = 'SENHA'  # senha de usuario
 
     print('inserindo senha')
     login_senha = driver.find_element('xpath', '//*[@id="Editbox2"]')
@@ -61,7 +61,7 @@ def fazer_login_um_sem_page():
     login.send_keys(usuario)
     time.sleep(0.3)
 
-    senha = '3Q7kViZyqt'  # senha de usuario
+    senha = 'SENHA'  # senha de usuario
 
     login_senha = driver.find_element('xpath', '//*[@id="Editbox2"]')
     login_senha.click()
@@ -92,7 +92,7 @@ def fazer_login_dois():
     print("apagando caso tenha algo escrito")
     pyautogui.typewrite(['backspace'] * 10)
     time.sleep(0.3)
-    pyautogui.typewrite("Pro@@2023")
+    pyautogui.typewrite("SENHA")
     time.sleep(0.3)
     pyautogui.moveTo(779, 531, duration=2)
 
